@@ -158,7 +158,7 @@ export default {
       this.messages.push(botTyping)
 
       try {
-        const response = await axios.post('http://46.147.127.169:8000/help_bot', {
+        const response = await axios.post('http://46.147.127.169:8000/assist', {
           query: userMessage.text
         })
         this.messages = this.messages.map((msg) => {
