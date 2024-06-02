@@ -30,7 +30,7 @@
       </div>
 
       <div class="flex-1 p-4 overflow-y-auto bg-gray-50">
-        <div v-for="(message, index) in messages" :key="index" class="mb-4 flex items-start">
+        <div v-for="(message, index) in messages" :key="message.id" class="mb-4 flex items-start">
           <div v-if="message.user" class="flex items-center ml-auto">
             <span class="inline-block bg-gray-300 text-gray-800 py-2 px-4 rounded-lg shadow-sm">
               {{ message.text }}
@@ -125,12 +125,14 @@
 <script>
 import '@/assets/tinkoff-fonts.css'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   data() {
     return {
       messages: [
         {
+          id: uuidv4(),
           text: 'Привет, это QnA бот Тинькофф Помощь – Бизнес. Задавай мне вопросы связанные с бизнесом.',
           user: false,
           links: []
@@ -142,25 +144,36 @@ export default {
   methods: {
     async sendMessage() {
       if (this.input.trim() === '') return
-      const userMessage = { text: this.input, user: true }
+      const userMessage = { id: uuidv4(), text: this.input, user: true }
       this.messages.push(userMessage)
       this.input = ''
 
-      const botTyping = { text: '', user: false, typing: true }
+      const botTyping = {
+        id: uuidv4(),
+        text: '',
+        user: false,
+        typing: true,
+        relatedTo: userMessage.id
+      }
       this.messages.push(botTyping)
 
       try {
         const response = await axios.post('http://46.147.127.169:8000/help_bot', {
           query: userMessage.text
         })
-        this.messages.pop()
-        const botResponse = response.data
-        const botMessage = { text: botResponse.answer, user: false, links: [botResponse.url] }
-        this.messages.push(botMessage)
+        this.messages = this.messages.map((msg) => {
+          if (msg.id === botTyping.id) {
+            return { ...msg, text: response.data.answer, typing: false, links: [response.data.url] }
+          }
+          return msg
+        })
       } catch (error) {
-        this.messages.pop()
-        const botMessage = { text: 'Ошибка связи с сервером.', user: false, links: [] }
-        this.messages.push(botMessage)
+        this.messages = this.messages.map((msg) => {
+          if (msg.id === botTyping.id) {
+            return { ...msg, text: 'Ошибка связи с сервером.', typing: false }
+          }
+          return msg
+        })
       }
     }
   }
