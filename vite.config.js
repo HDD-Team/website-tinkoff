@@ -5,7 +5,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/', // Укажите '/' если сайт будет развернут в корневом каталоге
+  base: '/website-tinkoff/',
   plugins: [vue(), vueJsx()],
   resolve: {
     alias: {
