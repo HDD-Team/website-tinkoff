@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'TinkoffSans';
+  src:
+    url('@/assets/fonts/TinkoffSans-Regular.woff2') format('woff2'),
+    url('@/assets/fonts/TinkoffSans-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TinkoffSans';
+  src:
+    url('@/assets/fonts/TinkoffSans-Medium.woff2') format('woff2'),
+    url('@/assets/fonts/TinkoffSans-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TinkoffSans';
+  src:
+    url('@/assets/fonts/TinkoffSans-Bold.woff2') format('woff2'),
+    url('@/assets/fonts/TinkoffSans-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+body {
+  font-family: 'TinkoffSans', sans-serif;
+}
